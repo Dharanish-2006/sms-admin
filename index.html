@@ -1,206 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Mill | Admin Demo</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Smart Mill Admin Demo</title>
 <style>
-:root{
-  --green:#16845d;--green-dark:#106b4b;--green-soft:#e9f6ef;
-  --navy:#172b4d;--ink:#243247;--muted:#738096;--line:#e5eaf0;
-  --bg:#f5f7fa;--white:#fff;--red:#d94b4b;--amber:#d58a20;--blue:#3678c8;
-  --shadow:0 8px 24px rgba(24,43,77,.06);
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-button,input,select{font:inherit}
-.app{min-height:100vh;display:flex}
-.sidebar{width:250px;background:#14243d;color:#dce6f1;display:flex;flex-direction:column;padding:22px 15px;position:fixed;inset:0 auto 0 0;z-index:5}
-.brand{display:flex;align-items:center;gap:11px;padding:4px 10px 28px}
-.brand-mark{width:38px;height:38px;border-radius:12px;background:#1b9a6b;display:grid;place-items:center;color:#fff;font-weight:800;font-size:20px}
-.brand strong{font-size:18px;color:#fff;letter-spacing:.2px}.brand small{display:block;color:#91a3b9;font-size:11px;margin-top:3px}
-.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:1.3px;color:#8294aa;padding:8px 12px}
-.nav{display:grid;gap:5px}
-.nav button{border:0;background:transparent;color:#b8c6d6;text-align:left;padding:12px 13px;border-radius:9px;cursor:pointer;display:flex;gap:12px;align-items:center;font-size:13px}
-.nav button:hover,.nav button.active{background:#213b5b;color:#fff}
-.nav button.active{box-shadow:inset 3px 0 #35c28a}
-.nav .ico{width:19px;text-align:center;font-size:16px}
-.sidebar-bottom{margin-top:auto;border-top:1px solid #2b405b;padding:15px 8px 0;color:#91a3b9;font-size:11px;line-height:1.6}
-.main{margin-left:250px;width:calc(100% - 250px);min-width:0}
-.topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:4}
-.breadcrumb{font-size:13px;color:var(--muted)}.breadcrumb b{color:var(--ink)}
-.top-actions{display:flex;align-items:center;gap:16px}.live{font-size:11px;color:var(--green);background:var(--green-soft);padding:7px 10px;border-radius:20px;font-weight:700}
-.avatar{width:34px;height:34px;border-radius:50%;background:#e4f3ec;color:var(--green-dark);display:grid;place-items:center;font-weight:700;font-size:12px}
-.content{padding:28px 32px 40px;max-width:1500px;margin:auto}
-.page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:23px}
-h1{font-size:24px;margin:0 0 6px;color:var(--navy)}.sub{color:var(--muted);font-size:13px}
-.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 13px;color:var(--ink);font-size:12px;cursor:pointer;font-weight:600}
-.btn.primary{background:var(--green);border-color:var(--green);color:#fff}.btn.primary:hover{background:var(--green-dark)}
-.btn.small{padding:6px 9px;font-size:11px}
-.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}
-.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px;box-shadow:var(--shadow)}
-.stat{display:flex;justify-content:space-between;align-items:flex-start}
-.stat-label{color:var(--muted);font-size:12px}.stat-value{font-size:27px;font-weight:750;color:var(--navy);margin:9px 0 4px}.stat-note{font-size:11px;color:var(--green)}
-.stat-icon{width:38px;height:38px;border-radius:11px;background:#eaf6f0;color:var(--green);display:grid;place-items:center;font-size:18px}
-.two-col{grid-template-columns:1.55fr 1fr}.three-col{grid-template-columns:repeat(3,1fr)}
-.card-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-.card-title h3{font-size:14px;margin:0;color:var(--navy)}.card-title span{font-size:11px;color:var(--muted)}
-.chart{height:220px;display:flex;align-items:flex-end;gap:13px;padding:18px 10px 25px;border-bottom:1px solid var(--line);position:relative}
-.bar-wrap{flex:1;height:100%;display:flex;align-items:flex-end;position:relative}
-.bar{width:100%;max-width:34px;margin:auto;background:linear-gradient(180deg,#43bf8b,#16845d);border-radius:6px 6px 2px 2px;min-height:8px}
-.bar-label{position:absolute;bottom:-22px;width:100%;text-align:center;font-size:10px;color:var(--muted)}
-.legend{display:flex;gap:15px;margin-top:16px;font-size:11px;color:var(--muted)}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--green)}
-.list{display:grid;gap:13px}.activity{display:flex;gap:10px;align-items:flex-start;font-size:12px}.activity-icon{width:30px;height:30px;border-radius:9px;background:#f0f5fa;display:grid;place-items:center}
-.activity b{display:block;font-size:12px;margin-bottom:3px}.activity small{color:var(--muted)}
-.table-card{padding:0;overflow:hidden}.table-head{padding:17px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.table-head h3{margin:0;font-size:14px;color:var(--navy)}
-.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.search,.filter{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11px;background:#fff;color:var(--ink);outline:none}
-.search{min-width:180px}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#8490a1;background:#f8fafc;padding:12px 16px;font-weight:700}
-td{padding:13px 16px;border-top:1px solid #edf0f4;font-size:12px}
-td strong{font-weight:650;color:var(--navy)}td small{display:block;color:var(--muted);margin-top:3px;font-size:10px}
-.status{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:5px 8px;font-size:10px;font-weight:700;background:#eaf6ef;color:#16845d}
-.status:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
-.status.offline,.status.critical{background:#fff0f0;color:var(--red)}
-.status.delayed,.status.warning{background:#fff6e8;color:var(--amber)}
-.status.info{background:#edf4ff;color:var(--blue)}
-.actions{display:flex;gap:6px}
-.machine-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.machine-card h3{margin:0;font-size:14px;color:var(--navy)}.machine-meta{font-size:11px;color:var(--muted);margin:5px 0 15px}
-.metric-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.metric{background:#f7f9fb;padding:10px;border-radius:8px}.metric small{font-size:10px;color:var(--muted)}.metric b{display:block;font-size:16px;color:var(--navy);margin-top:5px}
-.progress{height:6px;background:#e9edf2;border-radius:10px;overflow:hidden;margin-top:7px}.progress i{display:block;height:100%;background:var(--green);border-radius:10px}
-.alert-item{display:flex;gap:12px;padding:14px 18px;border-top:1px solid #edf0f4}.alert-mark{width:32px;height:32px;border-radius:9px;background:#fff2e5;color:var(--amber);display:grid;place-items:center}
-.alert-item h4{font-size:12px;margin:0 0 4px}.alert-item p{font-size:11px;color:var(--muted);margin:0}.alert-item time{font-size:10px;color:#98a2b1}
-.report-grid{grid-template-columns:repeat(3,1fr)}
-.report-card h3{font-size:13px;margin:0 0 7px}.report-card p{font-size:11px;color:var(--muted);line-height:1.5;margin:0 0 15px}
-.profile-layout{grid-template-columns:280px 1fr}.profile-summary{text-align:center}.profile-big{width:72px;height:72px;border-radius:50%;margin:5px auto 12px;background:#e6f5ed;color:var(--green);display:grid;place-items:center;font-size:24px;font-weight:800}
-.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}.field input{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;font-size:12px}
-.empty-note{font-size:11px;color:var(--muted);padding:18px}
-.toast{position:fixed;right:25px;bottom:25px;background:#18334e;color:#fff;padding:12px 16px;border-radius:9px;font-size:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:20}.toast.show{opacity:1;transform:translateY(0)}
-.modal-backdrop{position:fixed;inset:0;background:#10243b66;display:none;align-items:center;justify-content:center;z-index:30;padding:20px}.modal-backdrop.show{display:flex}
-.modal{background:#fff;border-radius:14px;padding:22px;width:min(440px,100%);box-shadow:0 20px 60px #14243d33}.modal h3{margin:0 0 16px;color:var(--navy)}.modal .field{margin-bottom:12px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
-@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.machine-grid,.report-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.sidebar{width:68px;padding:15px 8px}.brand{padding:4px 6px 25px}.brand div:last-child,.nav-label,.nav button span:not(.ico),.sidebar-bottom{display:none}.nav button{justify-content:center;padding:12px 8px}.main{margin-left:68px;width:calc(100% - 68px)}.topbar{padding:0 16px}.content{padding:20px 14px}.stats{grid-template-columns:1fr 1fr}.machine-grid,.report-grid,.profile-layout{grid-template-columns:1fr}.page-head{flex-direction:column}.table-card{overflow-x:auto}.table-card table{min-width:650px}.field-grid{grid-template-columns:1fr}}
-@media(max-width:430px){.stats{grid-template-columns:1fr}.topbar{height:60px}.live{display:none}}
-</style>
-</head>
-<body>
-<div class="app">
-  <aside class="sidebar">
-    <div class="brand"><div class="brand-mark">S</div><div><strong>Smart Mill</strong><small>ENERGY MONITORING</small></div></div>
-    <div class="nav-label">Workspace</div>
-    <nav class="nav" id="navigation">
-      <button class="active" data-page="dashboard"><span class="ico">▦</span><span>Dashboard</span></button>
-      <button data-page="users"><span class="ico">♙</span><span>Users</span></button>
-      <button data-page="gateways"><span class="ico">⌁</span><span>Gateways</span></button>
-      <button data-page="machines"><span class="ico">▣</span><span>Machines</span></button>
-      <button data-page="alerts"><span class="ico">♢</span><span>Alerts</span></button>
-      <button data-page="reports"><span class="ico">▤</span><span>Reports</span></button>
-    </nav>
-    <div class="nav-label" style="margin-top:22px">Account</div>
-    <nav class="nav">
-      <button data-page="profile"><span class="ico">◉</span><span>Profile</span></button>
-      <button id="logout"><span class="ico">↪</span><span>Logout</span></button>
-    </nav>
-    <div class="sidebar-bottom">Smart Mill Admin Portal<br>Demo interface · Sample data</div>
-  </aside>
-  <main class="main">
-    <header class="topbar">
-      <div class="breadcrumb">Smart Mill <span style="padding:0 7px">/</span> <b id="crumb">Dashboard</b></div>
-      <div class="top-actions"><span class="live">● SYSTEM ONLINE</span><span style="font-size:12px;color:#738096">Administrator</span><div class="avatar">AD</div></div>
-    </header>
-    <section class="content" id="screen"></section>
-  </main>
-</div>
-<div class="toast" id="toast"></div>
-<div class="modal-backdrop" id="modal">
-  <div class="modal"><h3 id="modal-title">Add record</h3><div id="modal-fields"></div><div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveModal()">Save</button></div></div>
-</div>
+:root{--g:#16845d;--gs:#eaf6ef;--n:#172b4d;--ink:#26364b;--m:#758399;--l:#e6ebf1;--bg:#f5f7fa;--red:#c94b4b;--amber:#c98725}*{box-sizing:border-box}body{margin:0;font:14px Arial,sans-serif;background:var(--bg);color:var(--ink)}button,input,select{font:inherit}.side{position:fixed;inset:0 auto 0 0;width:235px;background:#14243d;color:#dce6f1;padding:22px 14px;display:flex;flex-direction:column}.brand{font-size:18px;font-weight:bold;color:white;padding:8px 10px 30px}.brand i{display:inline-grid;place-items:center;background:#1a9669;width:35px;height:35px;border-radius:10px;margin-right:8px;font-style:normal}.navtitle{font-size:10px;color:#8294aa;text-transform:uppercase;padding:10px}.nav button{width:100%;border:0;background:transparent;color:#b8c6d6;text-align:left;padding:12px;border-radius:8px;cursor:pointer;margin:2px 0}.nav button.active,.nav button:hover{background:#213b5b;color:white}.foot{margin-top:auto;border-top:1px solid #2b405b;padding:14px 8px;color:#91a3b9;font-size:10px}.main{margin-left:235px}.top{height:68px;background:white;border-bottom:1px solid var(--l);display:flex;justify-content:space-between;align-items:center;padding:0 28px;color:var(--m);font-size:12px}.content{padding:28px;max-width:1400px;margin:auto}h1{font-size:24px;color:var(--n);margin:0 0 6px}.sub{color:var(--m);font-size:12px}.head{display:flex;justify-content:space-between;gap:12px;margin-bottom:22px}.grid{display:grid;gap:15px}.stats{grid-template-columns:repeat(4,1fr);margin-bottom:16px}.card{background:white;border:1px solid var(--l);border-radius:12px;padding:17px;box-shadow:0 6px 20px #1b35500a}.statlabel{font-size:11px;color:var(--m)}.num{font-size:27px;color:var(--n);font-weight:bold;margin:9px 0 4px}.note{font-size:10px;color:var(--g)}.cols{grid-template-columns:1.2fr 1fr}.btn{border:1px solid var(--l);background:white;padding:8px 11px;border-radius:8px;font-size:11px;cursor:pointer}.primary{background:var(--g);color:white;border-color:var(--g)}.danger{color:var(--red)}.small{padding:6px 8px}.tablecard{padding:0;overflow:hidden}.tablehead{display:flex;justify-content:space-between;align-items:center;padding:16px;gap:10px}.tablehead b{color:var(--n)}.search,select{border:1px solid var(--l);padding:8px;border-radius:7px;font-size:11px}table{width:100%;border-collapse:collapse}th{text-align:left;background:#f8fafc;color:#8490a1;font-size:10px;text-transform:uppercase;padding:12px}td{padding:13px 12px;border-top:1px solid #edf0f4;font-size:12px}td strong{color:var(--n)}td small{display:block;color:var(--m);font-size:10px;margin-top:3px}.pill{display:inline-block;padding:5px 8px;border-radius:20px;background:var(--gs);color:var(--g);font-size:10px;font-weight:bold}.pending{background:#fff5e7;color:var(--amber)}.rejected{background:#fff0f0;color:var(--red)}.actions{display:flex;gap:5px;flex-wrap:wrap}.notice{margin-top:15px;padding:13px;background:#f1faf5;border:1px solid #dcefe5;border-radius:9px;color:#386d55;font-size:11px;line-height:1.6}.steps{grid-template-columns:repeat(3,1fr)}.step{border:1px solid var(--l);border-radius:10px;padding:15px}.step b{color:var(--n);font-size:12px}.step p{font-size:10px;color:var(--m);line-height:1.5}.field{margin:12px 0}.field label{display:block;font-size:11px;color:var(--m);margin-bottom:6px}.field input,.field select{width:100%;padding:10px}.profile{grid-template-columns:230px 1fr}.center{text-align:center}.bubble{margin:5px auto 12px;width:65px;height:65px;border-radius:50%;display:grid;place-items:center;background:var(--gs);color:var(--g);font-size:22px;font-weight:bold}.modalbg{display:none;position:fixed;inset:0;background:#10243b77;align-items:center;justify-content:center;padding:15px}.modalbg.show{display:flex}.modal{background:white;padding:22px;border-radius:13px;width:min(400px,100%)}.modalactions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.toast{position:fixed;bottom:20px;right:20px;background:#18334e;color:white;padding:12px 15px;border-radius:8px;font-size:12px;opacity:0;transition:.2s}.toast.show{opacity:1}@media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}}@media(max-width:650px){.side{width:60px;padding:12px 6px}.brand{font-size:0;padding:5px}.brand i{margin:0}.navtitle,.nav button span,.foot{display:none}.nav button{text-align:center;padding:12px 5px;font-size:0}.nav button:after{content:attr(data-short);font-size:12px}.main{margin-left:60px}.content{padding:18px 12px}.top{padding:0 12px}.head{flex-direction:column}.steps,.profile{grid-template-columns:1fr}.tablecard{overflow-x:auto}.tablecard table{min-width:680px}}@media(max-width:400px){.stats{grid-template-columns:1fr}}
+</style></head><body>
+<aside class="side"><div class="brand"><i>S</i><span>SMART MILL</span></div><div class="navtitle">Administration</div><nav class="nav">
+<button class="active" data-p="dashboard" data-short="▦">▦　Dashboard</button><button data-p="approvals" data-short="♙">♙　User Approval</button><button data-p="assignment" data-short="⌁">⌁　Gateway Assignment</button><button data-p="connections" data-short="⇄">⇄　Connections</button></nav><div class="navtitle">Account</div><nav class="nav"><button data-p="profile" data-short="◉">◉　Profile</button><button id="logout" data-short="↪">↪　Logout</button></nav><div class="foot">Admin Portal · Demo data</div></aside>
+<main class="main"><header class="top"><span>Smart Mill / <b id="crumb">Dashboard</b></span><span>● ADMIN SESSION　　<b>AD</b></span></header><section class="content" id="screen"></section></main>
+<div class="modalbg" id="modal"><div class="modal"><h3 id="mtitle">Confirm</h3><p class="sub" id="mbody">Confirm this action?</p><div class="modalactions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" id="mconfirm">Confirm</button></div></div></div><div class="toast" id="toast"></div>
 <script>
-const screen=document.getElementById('screen');
-const crumb=document.getElementById('crumb');
-const toastEl=document.getElementById('toast');
-let currentPage='dashboard', modalType='';
-let users=[
- {name:'Arun Kumar',email:'arun@mill.com',gateways:2,status:'Active',joined:'12 Oct 2026'},
- {name:'Priya S',email:'priya@mill.com',gateways:1,status:'Active',joined:'18 Oct 2026'},
- {name:'Karthik R',email:'karthik@mill.com',gateways:3,status:'Active',joined:'22 Oct 2026'},
- {name:'Meena V',email:'meena@mill.com',gateways:0,status:'Inactive',joined:'28 Oct 2026'}
-];
-let gateways=[
- {id:'GW-1001',machine:'Compressor A',user:'Arun Kumar',last:'Just now',status:'Online'},
- {id:'GW-1002',machine:'Motor B',user:'Arun Kumar',last:'1 min ago',status:'Online'},
- {id:'GW-1003',machine:'Pump C',user:'Priya S',last:'2 min ago',status:'Delayed'},
- {id:'GW-1004',machine:'Mixer D',user:'Karthik R',last:'12 min ago',status:'Offline'}
-];
-let machines=[
- {name:'Compressor A',code:'MCH-001',gateway:'GW-1001',user:'Arun Kumar',status:'ON',runtime:'08h 42m',pf:'0.96',load:78,energy:124.6},
- {name:'Motor B',code:'MCH-002',gateway:'GW-1002',user:'Arun Kumar',status:'ON',runtime:'06h 15m',pf:'0.93',load:64,energy:98.2},
- {name:'Pump C',code:'MCH-003',gateway:'GW-1003',user:'Priya S',status:'ON',runtime:'04h 28m',pf:'0.89',load:91,energy:156.8},
- {name:'Mixer D',code:'MCH-004',gateway:'GW-1004',user:'Karthik R',status:'OFF',runtime:'00h 00m',pf:'—',load:0,energy:42.1},
- {name:'Conveyor E',code:'MCH-005',gateway:'GW-1005',user:'Karthik R',status:'ON',runtime:'03h 52m',pf:'0.95',load:56,energy:76.4},
- {name:'Blower F',code:'MCH-006',gateway:'GW-1006',user:'Meena V',status:'ON',runtime:'07h 10m',pf:'0.97',load:72,energy:112.3}
-];
-let alerts=[
- {title:'High energy consumption detected',detail:'Pump C · Usage is above configured maximum threshold.',time:'Today, 11:42 AM',level:'warning'},
- {title:'Gateway communication lost',detail:'GW-1004 · No readings received for more than 3 minutes.',time:'Today, 11:28 AM',level:'critical'},
- {title:'Power factor below expected range',detail:'Pump C · Latest power factor reading: 0.89.',time:'Today, 10:56 AM',level:'warning'}
-];
-const money=n=>n.toFixed(1)+' kWh';
-function notify(msg){toastEl.textContent=msg;toastEl.classList.add('show');setTimeout(()=>toastEl.classList.remove('show'),2300)}
-function badge(s){let c=['Offline','OFF','Inactive','Critical'].includes(s)?'offline':['Delayed','Warning'].includes(s)?'delayed':['ON','Online','Active','Acknowledged'].includes(s)?'':'info';return `<span class="status ${c}">${s}</span>`}
-function head(title,sub,action=''){return `<div class="page-head"><div><h1>${title}</h1><div class="sub">${sub}</div></div>${action}</div>`}
-function stat(label,value,note,icon){return `<div class="card"><div class="stat"><div><div class="stat-label">${label}</div><div class="stat-value">${value}</div><div class="stat-note">${note}</div></div><div class="stat-icon">${icon}</div></div></div>`}
-function table(headers,rows){return `<table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`}
-function dashboard(){return head('Dashboard','System-wide energy monitoring overview')+
-`<div class="grid stats">${stat('Registered Users',users.length,'Across the platform','♙')}${stat('Registered Gateways',gateways.length,'1 delayed · 1 offline','⌁')}${stat('Monitored Machines',machines.length,'5 currently running','▣')}${stat('Energy Consumption','610.4 kWh','Today · sample total','ϟ')}</div>
-<div class="grid two-col">
-<div class="card"><div class="card-title"><h3>Energy Consumption</h3><span>Today · kWh</span></div><div class="chart">${[42,60,48,76,65,88,72,95,82,68,90,78].map((v,i)=>`<div class="bar-wrap"><div class="bar" style="height:${v}%"></div><div class="bar-label">${i+1}</div></div>`).join('')}</div><div class="legend"><span><i class="dot"></i>Energy consumed</span><span>Hourly sample data</span></div></div>
-<div class="card"><div class="card-title"><h3>Recent Activity</h3><span>Latest events</span></div><div class="list">
-<div class="activity"><div class="activity-icon">♙</div><div><b>New user registered</b><small>Priya S · 18 Oct 2026</small></div></div>
-<div class="activity"><div class="activity-icon">⌁</div><div><b>Gateway assigned</b><small>GW-1003 assigned to Priya S</small></div></div>
-<div class="activity"><div class="activity-icon">♢</div><div><b>Energy threshold alert</b><small>Pump C · Today, 11:42 AM</small></div></div>
-<div class="activity"><div class="activity-icon">▤</div><div><b>Monthly report generated</b><small>October 2026</small></div></div></div></div></div>
-<div class="grid two-col" style="margin-top:16px"><div class="card table-card"><div class="table-head"><h3>Machine Overview</h3><button class="btn small" onclick="navigate('machines')">View all</button></div>${table(['Machine','User','Status','Energy'],machines.slice(0,4).map(m=>`<tr><td><strong>${m.name}</strong><small>${m.code}</small></td><td>${m.user}</td><td>${badge(m.status)}</td><td><strong>${money(m.energy)}</strong></td></tr>`).join(''))}</div><div class="card"><div class="card-title"><h3>Gateway Health</h3><span>Connectivity</span></div>${gateways.map(g=>`<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #edf0f4;font-size:12px"><span><b>${g.id}</b><small style="display:block;color:#8490a1;margin-top:3px">${g.machine}</small></span>${badge(g.status)}</div>`).join('')}</div></div>`}
-function usersPage(){return head('Users','Create and manage Smart Mill user accounts',`<button class="btn primary" onclick="openModal('user')">＋ Add User</button>`)+
-`<div class="card table-card"><div class="table-head"><h3>Registered Users <span style="color:#8490a1;font-weight:400">(${users.length})</span></h3><div class="controls"><input class="search" placeholder="Search users..." oninput="filterRows(this)"><select class="filter" onchange="filterStatus(this,'users-table')"><option value="">All statuses</option><option>Active</option><option>Inactive</option></select></div></div><div id="users-table">${table(['User','Assigned Gateways','Status','Joined','Actions'],users.map((u,i)=>`<tr><td><strong>${u.name}</strong><small>${u.email}</small></td><td>${u.gateways}</td><td>${badge(u.status)}</td><td>${u.joined}</td><td><div class="actions"><button class="btn small" onclick="editUser(${i})">Edit</button><button class="btn small" onclick="toggleUser(${i})">${u.status==='Active'?'Deactivate':'Activate'}</button></div></td></tr>`).join(''))}</div></div>`}
-function gatewaysPage(){return head('Gateways','Register, assign and monitor industrial gateways',`<button class="btn primary" onclick="openModal('gateway')">＋ Register Gateway</button>`)+
-`<div class="grid stats">${stat('Total Gateways',gateways.length,'Registered devices','⌁')}${stat('Online',gateways.filter(g=>g.status==='Online').length,'Sending readings','●')}${stat('Delayed',gateways.filter(g=>g.status==='Delayed').length,'Check communication','◷')}${stat('Offline',gateways.filter(g=>g.status==='Offline').length,'No recent readings','!')}</div>
-<div class="card table-card"><div class="table-head"><h3>Gateway Registry</h3><div class="controls"><input class="search" placeholder="Search gateway..." oninput="filterRows(this)"><select class="filter" onchange="filterStatus(this,'gateway-table')"><option value="">All statuses</option><option>Online</option><option>Delayed</option><option>Offline</option></select></div></div><div id="gateway-table">${table(['Gateway ID','Connected Machine','Assigned User','Last Communication','Status','Actions'],gateways.map((g,i)=>`<tr><td><strong>${g.id}</strong></td><td>${g.machine}</td><td>${g.user}</td><td>${g.last}</td><td>${badge(g.status)}</td><td><button class="btn small" onclick="assignGateway(${i})">Assign</button></td></tr>`).join(''))}</div></div>
-<div class="card" style="margin-top:16px"><b style="font-size:12px">Assignment rules</b><p class="sub" style="line-height:1.7;margin-bottom:0">One gateway connects to one machine or meter. Each gateway has one active user assignment at a time. A user may have multiple gateways. Assignment history should be retained.</p></div>`}
-function machinesPage(){return head('Machines','Monitor machine status and energy performance',`<button class="btn" onclick="notify('Machine list exported in demo mode')">↓ Export</button>`)+
-`<div class="grid machine-grid">${machines.map(m=>`<div class="card machine-card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>${m.name}</h3>${badge(m.status)}</div><div class="machine-meta">${m.code} · ${m.gateway} · ${m.user}</div><div class="metric-row"><div class="metric"><small>Runtime</small><b>${m.runtime}</b></div><div class="metric"><small>Power factor</small><b>${m.pf}</b></div><div class="metric"><small>Load factor</small><b>${m.load}%</b><div class="progress"><i style="width:${m.load}%"></i></div></div><div class="metric"><small>Power consumed</small><b>${money(m.energy)}</b></div></div><button class="btn small" style="margin-top:13px" onclick="notify('Showing sample history for ${m.name}')">View history</button></div>`).join('')}</div>`}
-function alertsPage(){return head('Alerts','System and energy-related notifications',`<button class="btn" onclick="notify('Alert list refreshed')">↻ Refresh</button>`)+
-`<div class="grid stats">${stat('Total Alerts',alerts.length,'Sample alert records','♢')}${stat('Critical',alerts.filter(a=>a.level==='critical').length,'Requires attention','!')}${stat('Warnings',alerts.filter(a=>a.level==='warning').length,'Review recommended','⚑')}${stat('Acknowledged',0,'No alerts acknowledged','✓')}</div>
-<div class="card" style="padding:0;overflow:hidden"><div class="table-head"><h3>Alert Centre</h3><select class="filter" onchange="filterAlert(this)"><option value="">All alerts</option><option value="critical">Critical</option><option value="warning">Warning</option></select></div><div id="alert-list">${alerts.map((a,i)=>alertRow(a,i)).join('')}</div></div>`}
-function alertRow(a,i){return `<div class="alert-item" data-level="${a.level}"><div class="alert-mark">${a.level==='critical'?'!':'⚑'}</div><div style="flex:1"><h4>${a.title} ${badge(a.level==='critical'?'Critical':'Warning')}</h4><p>${a.detail}</p><time>${a.time}</time></div><button class="btn small" onclick="ackAlert(${i},this)">Acknowledge</button></div>`}
-function reportsPage(){return head('Reports & Analytics','Review and download consolidated energy reports')+
-`<div class="grid report-grid">${[['Daily Consumption Report','Daily energy usage across machines and users.'],['Weekly Consumption Report','Weekly trends and machine comparisons.'],['Monthly Consumption Report','Monthly totals and consumption patterns.'],['Machine-wise Report','Detailed readings and runtime for each machine.'],['User-wise Report','Energy consumption grouped by assigned user.'],['Gateway Health Report','Connectivity and communication history.']].map((r,i)=>`<div class="card report-card"><div class="stat-icon" style="margin-bottom:13px">▤</div><h3>${r[0]}</h3><p>${r[1]}</p><div class="controls"><input class="filter" type="date" value="2026-11-06"><button class="btn small primary" onclick="notify('${r[0]} generated (demo)')">Generate</button><button class="btn small" onclick="notify('Sample CSV download prepared')">CSV ↓</button></div></div>`).join('')}</div>
-<div class="card" style="margin-top:16px"><div class="card-title"><h3>Consumption Summary</h3><span>Sample data</span></div>${table(['Machine','Energy consumed','Runtime','Power factor'],machines.map(m=>`<tr><td><strong>${m.name}</strong></td><td>${money(m.energy)}</td><td>${m.runtime}</td><td>${m.pf}</td></tr>`).join(''))}</div>`}
-function profilePage(){return head('Admin Profile','Administrator account details and preferences')+
-`<div class="grid profile-layout"><div class="card profile-summary"><div class="profile-big">AD</div><h3 style="margin:0;color:var(--navy)">Admin Demo</h3><p class="sub">System Administrator</p>${badge('Active')}<p class="sub" style="margin-top:18px">Full system access</p></div><div class="card"><div class="card-title"><h3>Personal Information</h3><button class="btn small" onclick="notify('Profile changes saved in demo mode')">Save Changes</button></div><div class="field-grid"><div class="field"><label>Full name</label><input value="Admin Demo"></div><div class="field"><label>Email address</label><input value="admin@smartmill.com"></div><div class="field"><label>Role</label><input value="System Administrator" disabled></div><div class="field"><label>Account status</label><input value="Active" disabled></div></div><div style="border-top:1px solid var(--line);margin-top:22px;padding-top:18px"><h3 style="font-size:13px">Security</h3><p class="sub">Password and authentication settings can be connected to the production authentication service.</p><button class="btn" onclick="notify('Password update flow is a demo placeholder')">Change Password</button></div></div></div>`}
-const renderers={dashboard,users:usersPage,gateways:gatewaysPage,machines:machinesPage,alerts:alertsPage,reports:reportsPage,profile:profilePage};
-function navigate(page){currentPage=page;document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));crumb.textContent=page[0].toUpperCase()+page.slice(1);screen.innerHTML=renderers[page]();window.scrollTo(0,0)}
-document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(b)navigate(b.dataset.page)});
-document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
-document.getElementById('logout').addEventListener('click',()=>notify('Demo logout clicked'));
-function filterRows(input){const table=input.closest('.card').querySelector('tbody');if(!table)return;const q=input.value.toLowerCase();table.querySelectorAll('tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}
-function filterStatus(sel,id){document.querySelectorAll('#'+id+' tbody tr').forEach(r=>r.style.display=!sel.value||r.innerText.includes(sel.value)?'':'none')}
-function filterAlert(sel){document.querySelectorAll('.alert-item').forEach(r=>r.style.display=!sel.value||r.dataset.level===sel.value?'':'none')}
-function ackAlert(i,btn){btn.textContent='Acknowledged';btn.disabled=true;btn.classList.add('primary');notify('Alert acknowledged in demo mode')}
-function openModal(type){modalType=type;document.getElementById('modal-title').textContent=type==='user'?'Add User':'Register Gateway';let fields=type==='user'?[['Full name','name'],['Email address','email']]:[['Gateway ID','id'],['Connected machine','machine']];document.getElementById('modal-fields').innerHTML=fields.map(f=>`<div class="field"><label>${f[0]}</label><input id="modal-${f[1]}" placeholder="${f[0]}"></div>`).join('')+(type==='gateway'?`<div class="field"><label>Assign user</label><select id="modal-user" class="filter" style="width:100%">${users.map(u=>`<option>${u.name}</option>`).join('')}</select></div>`:'');document.getElementById('modal').classList.add('show')}
-function closeModal(){document.getElementById('modal').classList.remove('show')}
-function saveModal(){if(modalType==='user'){let name=document.getElementById('modal-name').value.trim(),email=document.getElementById('modal-email').value.trim();if(!name||!email){notify('Enter name and email');return}users.push({name,email,gateways:0,status:'Active',joined:'Today'});navigate('users')}else{let id=document.getElementById('modal-id').value.trim(),machine=document.getElementById('modal-machine').value.trim(),user=document.getElementById('modal-user').value;if(!id||!machine){notify('Enter gateway ID and machine');return}gateways.push({id,machine,user,last:'Not yet received',status:'Delayed'});navigate('gateways')}closeModal();notify('Record added to demo data')}
-function editUser(i){openModal('user');document.getElementById('modal-name').value=users[i].name;document.getElementById('modal-email').value=users[i].email;modalType='edituser';window.editingUser=i}
-function toggleUser(i){users[i].status=users[i].status==='Active'?'Inactive':'Active';navigate('users');notify('User status updated')}
-function assignGateway(i){modalType='assign';window.assigningGateway=i;document.getElementById('modal-title').textContent='Assign Gateway';document.getElementById('modal-fields').innerHTML=`<div class="field"><label>Gateway</label><input value="${gateways[i].id}" disabled></div><div class="field"><label>Assign to user</label><select id="modal-user" class="filter" style="width:100%">${users.map(u=>`<option>${u.name}</option>`).join('')}</select></div>`;document.getElementById('modal').classList.add('show')}
-const oldSave=saveModal;
-saveModal=function(){if(modalType==='assign'){gateways[window.assigningGateway].user=document.getElementById('modal-user').value;closeModal();navigate('gateways');notify('Gateway assignment updated');return}if(modalType==='edituser'){let i=window.editingUser;users[i].name=document.getElementById('modal-name').value;users[i].email=document.getElementById('modal-email').value;closeModal();navigate('users');notify('User details updated');return}oldSave()}
-navigate('dashboard');
-</script>
-</body>
-</html>
+const $=s=>document.querySelector(s);let users=[{id:'USR-1001',name:'Arun Kumar',email:'arun@mill.com',status:'Approved',date:'05 Nov 2026'},{id:'USR-1002',name:'Priya S',email:'priya@mill.com',status:'Pending',date:'06 Nov 2026'},{id:'USR-1003',name:'Karthik R',email:'karthik@mill.com',status:'Pending',date:'06 Nov 2026'},{id:'USR-1004',name:'Meena V',email:'meena@mill.com',status:'Rejected',date:'04 Nov 2026'},{id:'USR-1005',name:'Vijay M',email:'vijay@mill.com',status:'Approved',date:'02 Nov 2026'}];
+let gateways=[{id:'GW-1001',serial:'SN-A1001',status:'Available'},{id:'GW-1002',serial:'SN-A1002',status:'Assigned'},{id:'GW-1003',serial:'SN-A1003',status:'Available'},{id:'GW-1004',serial:'SN-A1004',status:'Assigned'}];
+let links=[{id:'ASN-001',user:'Arun Kumar',gateway:'GW-1002',date:'05 Nov 2026',state:'Connected'},{id:'ASN-002',user:'Vijay M',gateway:'GW-1004',date:'03 Nov 2026',state:'Disconnected'}];let action=null;
+function toast(x){$('#toast').textContent=x;$('#toast').classList.add('show');setTimeout(()=>$('#toast').classList.remove('show'),2200)}
+function pill(x){return `<span class="pill ${x==='Pending'||x==='Disconnected'?'pending':x==='Rejected'?'rejected':''}">${x}</span>`}
+function stat(a,b,c){return `<div class="card"><div class="statlabel">${a}</div><div class="num">${b}</div><div class="note">${c}</div></div>`}
+function table(h,r){return `<table><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${r}</tbody></table>`}
+function head(a,b,button=''){return `<div class="head"><div><h1>${a}</h1><div class="sub">${b}</div></div>${button}</div>`}
+function dashboard(){return head('Admin Dashboard','Manage user approvals and gateway connections')+`<div class="grid stats">${stat('Pending Approvals',users.filter(u=>u.status==='Pending').length,'Awaiting review')}${stat('Approved Users',users.filter(u=>u.status==='Approved').length,'Eligible for assignment')}${stat('Registered Gateways',gateways.length,'Gateway inventory')}${stat('Active Connections',links.filter(x=>x.state==='Connected').length,'Connected user-gateway pairs')}</div><div class="grid cols"><div class="card"><div class="tablehead" style="padding:0 0 15px"><b>Admin responsibilities</b></div><div class="grid steps"><div class="step"><b>1. Approve users</b><p>Review registrations and approve or reject access.</p><button class="btn small" onclick="go('approvals')">Open</button></div><div class="step"><b>2. Assign gateways</b><p>Allocate an available gateway to an approved user.</p><button class="btn small" onclick="go('assignment')">Open</button></div><div class="step"><b>3. Manage connections</b><p>Connect or disconnect assigned users.</p><button class="btn small" onclick="go('connections')">Open</button></div></div></div><div class="card"><b style="color:var(--n);font-size:13px">Gateway availability</b>${gateways.map(g=>`<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--l);font-size:12px"><b>${g.id}</b>${pill(g.status)}</div>`).join('')}</div></div><div class="notice"><b>Admin scope:</b> User approval, gateway assignment, and user-gateway connection management only. Machines, Alerts, and Reports are excluded.</div>`}
+function approvals(){return head('User Approval','Review registration requests and manage user approval status')+`<div class="card tablecard"><div class="tablehead"><b>Registration Requests</b><input class="search" placeholder="Search users..." oninput="search(this)"></div><div id="approvalTable">${table(['User ID','User details','Registered','Status','Action'],users.map((u,i)=>`<tr><td><b>${u.id}</b></td><td><strong>${u.name}</strong><small>${u.email}</small></td><td>${u.date}</td><td>${pill(u.status)}</td><td class="actions">${u.status==='Pending'?`<button class="btn primary small" onclick="approve(${i})">Approve</button><button class="btn danger small" onclick="reject(${i})">Reject</button>`:`<button class="btn small" onclick="toast('${u.name}: ${u.status}')">View</button>`}</td></tr>`).join(''))}</div></div><div class="notice">Only approved users can be assigned to gateways.</div>`}
+function assignment(){let ok=users.filter(u=>u.status==='Approved'),free=gateways.filter(g=>g.status==='Available');return head('Gateway Assignment','Assign an available gateway to an approved user')+`<div class="grid cols"><div class="card"><b style="color:var(--n)">New assignment</b><div class="field"><label>Approved user</label><select id="au">${ok.map(u=>`<option value="${u.id}">${u.name} · ${u.id}</option>`).join('')}</select></div><div class="field"><label>Available gateway</label><select id="ag">${free.map(g=>`<option value="${g.id}">${g.id} · ${g.serial}</option>`).join('')}</select></div><button class="btn primary" onclick="assign()">Assign Gateway</button><p class="sub">Only approved users and available gateways are selectable.</p></div><div class="card"><b style="color:var(--n)">Assignment rules</b><p class="sub">• One gateway has one active user assignment at a time.</p><p class="sub">• One user may have multiple gateways.</p><p class="sub">• Disconnect before reassignment.</p><p class="sub">• Keep assignment history.</p></div></div><div class="card tablecard" style="margin-top:16px"><div class="tablehead"><b>Assignment history</b></div>${table(['Assignment','User','Gateway','Date','Connection'],links.map(x=>`<tr><td>${x.id}</td><td>${x.user}</td><td>${x.gateway}</td><td>${x.date}</td><td>${pill(x.state)}</td></tr>`).join(''))}</div>`}
+function connections(){return head('Connections','Connect or disconnect users from their assigned gateways')+`<div class="card tablecard"><div class="tablehead"><b>User-gateway connections</b><input class="search" placeholder="Search connections..." oninput="search(this)"></div>${table(['Assignment','User','Gateway','Assigned date','Status','Action'],links.map((x,i)=>`<tr><td>${x.id}</td><td><b>${x.user}</b></td><td>${x.gateway}</td><td>${x.date}</td><td>${pill(x.state)}</td><td>${x.state==='Connected'?`<button class="btn danger small" onclick="disconnect(${i})">Disconnect</button>`:`<button class="btn primary small" onclick="connect(${i})">Connect</button>`}</td></tr>`).join(''))}</div><div class="notice">Disconnecting releases the gateway for future reassignment. The assignment remains in history.</div>`}
+function profile(){return head('Admin Profile','Administrator account information')+`<div class="grid profile"><div class="card center"><div class="bubble">AD</div><b>Smart Mill Admin</b><p class="sub">System Administrator</p>${pill('Active')}</div><div class="card"><div class="tablehead" style="padding:0 0 15px"><b>Account details</b><button class="btn primary small" onclick="toast('Profile saved in demo mode')">Save</button></div><div class="field"><label>Full name</label><input value="Smart Mill Admin"></div><div class="field"><label>Email</label><input value="admin@smartmill.com"></div><div class="field"><label>Role</label><input value="Administrator" disabled></div></div></div>`}
+const pages={dashboard,approvals,assignment,connections,profile};function go(p){document.querySelectorAll('[data-p]').forEach(b=>b.classList.toggle('active',b.dataset.p===p));$('#crumb').textContent=({dashboard:'Dashboard',approvals:'User Approval',assignment:'Gateway Assignment',connections:'Connections',profile:'Profile'})[p];$('#screen').innerHTML=pages[p]()}
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>go(b.dataset.p));
+function approve(i){users[i].status='Approved';go('approvals');toast('User approved')}
+function reject(i){confirm('Reject this registration?')&&(users[i].status='Rejected',go('approvals'),toast('Registration rejected'))}
+function assign(){let uid=$('#au')?.value,gid=$('#ag')?.value,u=users.find(x=>x.id===uid),g=gateways.find(x=>x.id===gid);if(!u||!g||u.status!=='Approved'||g.status!=='Available'){toast('Select an approved user and available gateway');return}links.unshift({id:'ASN-'+String(links.length+1).padStart(3,'0'),user:u.name,gateway:g.id,date:'Today',state:'Disconnected'});g.status='Assigned';go('assignment');toast('Gateway assigned')}
+function confirmBox(msg,fn){$('#mtitle').textContent=msg;$('#mbody').textContent='Please confirm this action.';action=fn;$('#mconfirm').onclick=()=>{$('#modal').classList.remove('show');let f=action;action=null;f()};$('#modal').classList.add('show')}
+function disconnect(i){confirmBox('Disconnect user?',()=>{links[i].state='Disconnected';let g=gateways.find(x=>x.id===links[i].gateway);if(g)g.status='Available';go('connections');toast('Disconnected; gateway available')})}
+function connect(i){confirmBox('Connect user?',()=>{if(links.some((x,j)=>j!==i&&x.gateway===links[i].gateway&&x.state==='Connected')){toast('Gateway already connected to another user');return}links[i].state='Connected';let g=gateways.find(x=>x.id===links[i].gateway);if(g)g.status='Assigned';go('connections');toast('User connected')})}
+function closeModal(){$('#modal').classList.remove('show')}
+function search(el){let q=el.value.toLowerCase(),tb=el.closest('.card').querySelector('tbody');if(tb)tb.querySelectorAll('tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}
+$('#logout').onclick=()=>toast('Demo logout selected');go('dashboard');
+</script></body></html>
